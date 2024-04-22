@@ -14,6 +14,7 @@ import { ProjectsModule } from './projects/projects.module';
       password: 'password',
       database: 'postgres',
       autoLoadEntities: true,
+      // make it disable in production
       synchronize: true,
     }),
     ProjectsModule,

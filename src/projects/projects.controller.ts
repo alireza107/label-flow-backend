@@ -18,14 +18,14 @@ export class ProjectsController {
   constructor(private readonly projectsService: ProjectsService) {}
 
   @Get()
-  findAll(@Query() paginationQuery): Project[] {
+  async findAll(@Query() paginationQuery): Promise<Project[]> {
     const { limit, offset } = paginationQuery;
     // return `This action returns all projects. Limit: ${limit}, offset: ${offset}`;
-    return this.projectsService.findAll();
+    return await this.projectsService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param() params): Project {
+  findOne(@Param() params): Promise<Project> {
     // return params.id;
     return this.projectsService.findOne(params.id);
   }
@@ -40,13 +40,13 @@ export class ProjectsController {
   update(
     @Param('id') id: string,
     @Body() updateProjectDto: UpdateProjectDto,
-  ): void {
+  ): Promise<void> {
     // return `This action updates project ${id} and ${body}`;
     return this.projectsService.update(id, updateProjectDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string): void {
+  remove(@Param('id') id: string): Promise<void> {
     // return `This action removes project ${id}`;
     return this.projectsService.remove(id);
   }
