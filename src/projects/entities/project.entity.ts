@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Label } from './label.entity';
 
 @Entity()
 export class Project {
@@ -8,8 +9,8 @@ export class Project {
   @Column()
   name: string;
 
-  @Column('json', { nullable: true })
-  labels: string[];
+  @OneToMany(() => Label, (label) => label.project, { cascade: true })
+  labels: Label[];
 
   @Column('json', { nullable: true })
   categories: string[];

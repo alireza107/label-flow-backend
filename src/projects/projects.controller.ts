@@ -20,6 +20,7 @@ export class ProjectsController {
   @Get()
   async findAll(@Query() paginationQuery): Promise<Project[]> {
     const { limit, offset } = paginationQuery;
+    console.log(limit, offset);
     // return `This action returns all projects. Limit: ${limit}, offset: ${offset}`;
     return await this.projectsService.findAll();
   }
@@ -31,7 +32,7 @@ export class ProjectsController {
   }
 
   @Post()
-  create(@Body() createProjectDto: CreateProjectDto): void {
+  create(@Body() createProjectDto: CreateProjectDto): Promise<void> {
     // return body;
     return this.projectsService.create(createProjectDto);
   }
