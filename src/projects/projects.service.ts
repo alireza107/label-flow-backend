@@ -5,6 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
 import { Label } from './entities/label.entity';
+import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto/pagination-query.dto';
 
 @Injectable()
 export class ProjectsService {
@@ -15,8 +16,13 @@ export class ProjectsService {
     private labelRepository: Repository<Label>,
   ) {}
 
-  findAll() {
-    return this.projectRepository.find({ relations: ['labels'] });
+  findAll(paginationQuery: PaginationQueryDto) {
+    const { limit, offset } = paginationQuery;
+    return this.projectRepository.find({
+      relations: ['labels'],
+      skip: offset,
+      take: limit,
+    });
   }
 
   async findOne(id: string) {

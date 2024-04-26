@@ -12,17 +12,17 @@ import { ProjectsService } from './projects.service';
 import { Project } from './entities/project.entity';
 import { UpdateProjectDto } from './dto/update-project.dto';
 import { CreateProjectDto } from './dto/create-project.dto';
+import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto/pagination-query.dto';
 
 @Controller('projects')
 export class ProjectsController {
   constructor(private readonly projectsService: ProjectsService) {}
 
   @Get()
-  async findAll(@Query() paginationQuery): Promise<Project[]> {
-    const { limit, offset } = paginationQuery;
-    console.log(limit, offset);
-    // return `This action returns all projects. Limit: ${limit}, offset: ${offset}`;
-    return await this.projectsService.findAll();
+  async findAll(
+    @Query() paginationQuery: PaginationQueryDto,
+  ): Promise<Project[]> {
+    return await this.projectsService.findAll(paginationQuery);
   }
 
   @Get(':id')
