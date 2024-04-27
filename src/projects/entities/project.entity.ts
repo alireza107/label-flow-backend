@@ -9,6 +9,9 @@ export class Project {
   @Column()
   name: string;
 
+  @Column()
+  description: string;
+
   @OneToMany(() => Label, (label) => label.project, { cascade: true })
   labels: Label[];
 
