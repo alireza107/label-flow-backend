@@ -1,5 +1,12 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  ManyToMany,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Label } from './label.entity';
+import { User } from 'src/user/user.entity';
 
 @Entity()
 export class Project {
@@ -14,4 +21,7 @@ export class Project {
 
   @Column('json', { nullable: true })
   categories: string[];
+
+  @ManyToMany(() => User)
+  users: User[];
 }
