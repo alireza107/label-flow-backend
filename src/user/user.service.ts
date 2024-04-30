@@ -18,12 +18,14 @@ export class UserService {
     return this.userRepository.find({
       skip: offset,
       take: limit,
+      relations: ['roles'],
     });
   }
 
   async findOne(id: string) {
     const user = await this.userRepository.findOne({
       where: { id: +id },
+      relations: ['roles'],
     });
 
     if (!user) {

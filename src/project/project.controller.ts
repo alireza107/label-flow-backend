@@ -14,7 +14,7 @@ import { UpdateProjectDto } from './dto/update-project.dto';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto/pagination-query.dto';
 
-@Controller('projects')
+@Controller('project')
 export class ProjectsController {
   constructor(private readonly projectsService: ProjectsService) {}
 

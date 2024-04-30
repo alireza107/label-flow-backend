@@ -25,6 +25,6 @@ export class Project {
   @Column('json', { nullable: true })
   categories: string[];
 
-  @ManyToMany(() => User)
+  @ManyToMany(() => User, (user) => user.projects)
   users: User[];
 }
