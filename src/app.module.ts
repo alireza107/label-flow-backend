@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ProjectsModule } from './projects/projects.module';
+import { ProjectModule } from './project/project.module';
 import { UserModule } from './user/user.module';
 
 @Module({
@@ -16,7 +16,7 @@ import { UserModule } from './user/user.module';
       // make it disable in production
       synchronize: true,
     }),
-    ProjectsModule,
+    ProjectModule,
     UserModule,
   ],
   controllers: [],
