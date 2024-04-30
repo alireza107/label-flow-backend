@@ -1,5 +1,10 @@
-import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { Role } from './role.entity';
+import {
+  Column,
+  Entity,
+  ManyToMany,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Project } from 'src/project/entities/project.entity';
 
 @Entity()
@@ -13,12 +18,16 @@ export class User {
   @Column()
   lastName: string;
 
+  // FIXME: unique don't work
   @Column({ unique: true })
   email: string;
 
-  @ManyToMany(() => Project, (project) => project.users)
-  projects: Project[];
+  @Column()
+  role: string;
 
-  @ManyToMany(() => Role, (role) => role.users)
-  roles: Role[];
+  @OneToMany(() => Project, (project) => project.createdBy)
+  createdProjects: Project[];
+
+  @ManyToMany(() => Project, (project) => project.members)
+  participatingProjects: Project[];
 }

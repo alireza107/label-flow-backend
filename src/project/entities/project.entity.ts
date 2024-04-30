@@ -1,7 +1,9 @@
 import {
   Column,
   Entity,
+  JoinTable,
   ManyToMany,
+  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -25,6 +27,10 @@ export class Project {
   @Column('json', { nullable: true })
   categories: string[];
 
-  @ManyToMany(() => User, (user) => user.projects)
-  users: User[];
+  @ManyToOne(() => User, (user) => user.createdProjects)
+  createdBy: User;
+
+  @ManyToMany(() => User, (user) => user.participatingProjects)
+  @JoinTable()
+  members: User[];
 }

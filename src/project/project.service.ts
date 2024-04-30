@@ -1,4 +1,9 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { Project } from './entities/project.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -6,6 +11,7 @@ import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
 import { Label } from './entities/label.entity';
 import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto/pagination-query.dto';
+import { User } from 'src/user/entities/user.entity';
 
 @Injectable()
 export class ProjectsService {
@@ -14,12 +20,14 @@ export class ProjectsService {
     private projectRepository: Repository<Project>,
     @InjectRepository(Label)
     private labelRepository: Repository<Label>,
+    @InjectRepository(User)
+    private userRepository: Repository<User>,
   ) {}
 
   findAll(paginationQuery: PaginationQueryDto) {
     const { limit, offset } = paginationQuery;
     return this.projectRepository.find({
-      relations: ['labels'],
+      relations: ['labels', 'createdBy', 'members'],
       skip: offset,
       take: limit,
     });
@@ -28,7 +36,7 @@ export class ProjectsService {
   async findOne(id: string) {
     const project = await this.projectRepository.findOne({
       where: { id: +id },
-      relations: ['labels'],
+      relations: ['labels', 'createdBy', 'members'],
     });
 
     if (!project) {
@@ -90,5 +98,17 @@ export class ProjectsService {
       return existingLabel;
     }
     return this.labelRepository.create({ name });
+  }
+
+  async joinProject(projectId: string, userId: number): Promise<void> {
+    const project = await this.findOne(projectId);
+    const user = await this.userRepository.findOne({ where: { id: userId } });
+
+    if (!project || !user) {
+      throw new NotFoundException('User or project not found');
+    }
+
+    project.members.push(user);
+    await this.projectRepository.save(project);
   }
 }
