@@ -1,4 +1,5 @@
-import { IsString } from 'class-validator';
+import { IsNumber, IsString } from 'class-validator';
+import { User } from 'src/user/entities/user.entity';
 
 export class CreateProjectDto {
   @IsString()
@@ -12,4 +13,7 @@ export class CreateProjectDto {
 
   @IsString({ each: true })
   readonly labels: string[];
+
+  @IsNumber()
+  readonly createdBy: User;
 }
