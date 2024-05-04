@@ -1,4 +1,4 @@
-import { IsNumber, IsString } from 'class-validator';
+import { IsArray, IsNumber, IsString } from 'class-validator';
 import { Category } from 'src/category/entities/category.entity';
 import { User } from 'src/user/entities/user.entity';
 
@@ -9,8 +9,8 @@ export class CreateProjectDto {
   @IsString()
   readonly description: string;
 
-  @IsString({ each: true })
-  readonly categories: Category['id'][];
+  @IsArray()
+  readonly categories: Category[];
 
   @IsString({ each: true })
   readonly labels: string[];

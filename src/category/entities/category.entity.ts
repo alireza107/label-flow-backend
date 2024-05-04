@@ -1,18 +1,12 @@
 import { Project } from 'src/project/entities/project.entity';
-import {
-  Column,
-  Entity,
-  JoinTable,
-  ManyToMany,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Category {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ unique: true })
   name: string;
 
   @Column()
@@ -22,6 +16,5 @@ export class Category {
   isActive: boolean;
 
   @ManyToMany(() => Project, (project) => project.categories)
-  @JoinTable()
   projects: Project[];
 }

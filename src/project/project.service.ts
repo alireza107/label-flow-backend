@@ -27,7 +27,7 @@ export class ProjectsService {
   findAll(paginationQuery: PaginationQueryDto) {
     const { limit, offset } = paginationQuery;
     return this.projectRepository.find({
-      relations: ['labels', 'createdBy', 'members'],
+      relations: ['labels', 'createdBy', 'members', 'categories'],
       skip: offset,
       take: limit,
     });
@@ -36,7 +36,7 @@ export class ProjectsService {
   async findOne(id: string) {
     const project = await this.projectRepository.findOne({
       where: { id: +id },
-      relations: ['labels', 'createdBy', 'members'],
+      relations: ['labels', 'createdBy', 'members', 'categories'],
     });
 
     if (!project) {
@@ -58,8 +58,6 @@ export class ProjectsService {
     const project = this.projectRepository.create({
       ...createProjectDto,
       labels,
-      // category is array of ids
-      categories: [],
     });
 
     this.projectRepository.save(project);
@@ -76,7 +74,7 @@ export class ProjectsService {
       id: +id,
       ...updateProjectDto,
       labels,
-      categories: [],
+      // categories: [],
     });
 
     if (!project) {
@@ -90,6 +88,7 @@ export class ProjectsService {
 
   async remove(id: string) {
     const project = await this.findOne(id);
+    this.labelRepository.remove(project.labels);
     this.projectRepository.remove(project);
   }
 
