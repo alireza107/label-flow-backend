@@ -5,13 +5,14 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { Project } from './entities/project.entity';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
 import { Label } from './entities/label.entity';
 import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto/pagination-query.dto';
 import { User } from 'src/user/entities/user.entity';
+import { Category } from 'src/category/entities/category.entity';
 
 @Injectable()
 export class ProjectsService {
@@ -22,6 +23,8 @@ export class ProjectsService {
     private labelRepository: Repository<Label>,
     @InjectRepository(User)
     private userRepository: Repository<User>,
+    @InjectRepository(Category)
+    private categoryRepository: Repository<Category>,
   ) {}
 
   findAll(paginationQuery: PaginationQueryDto) {
@@ -55,9 +58,14 @@ export class ProjectsService {
         createProjectDto.labels.map((label) => this.preloadLabelByName(label)),
       ));
 
+    const categories = await this.categoryRepository.findBy({
+      id: In(createProjectDto.categoryIds),
+    });
+
     const project = this.projectRepository.create({
       ...createProjectDto,
       labels,
+      categories,
     });
 
     this.projectRepository.save(project);
@@ -70,11 +78,15 @@ export class ProjectsService {
         updateProjectDto.labels.map((label) => this.preloadLabelByName(label)),
       ));
 
+    const categories = await this.categoryRepository.findBy({
+      id: In(updateProjectDto.categoryIds),
+    });
+
     const project = await this.projectRepository.preload({
       id: +id,
       ...updateProjectDto,
       labels,
-      // categories: [],
+      categories,
     });
 
     if (!project) {

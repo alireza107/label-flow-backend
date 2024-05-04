@@ -1,5 +1,4 @@
 import { IsArray, IsNumber, IsString } from 'class-validator';
-import { Category } from 'src/category/entities/category.entity';
 import { User } from 'src/user/entities/user.entity';
 
 export class CreateProjectDto {
@@ -10,7 +9,7 @@ export class CreateProjectDto {
   readonly description: string;
 
   @IsArray()
-  readonly categories: Category[];
+  readonly categoryIds: number[];
 
   @IsString({ each: true })
   readonly labels: string[];
