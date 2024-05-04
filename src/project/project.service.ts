@@ -58,6 +58,8 @@ export class ProjectsService {
     const project = this.projectRepository.create({
       ...createProjectDto,
       labels,
+      // category is array of ids
+      categories: [],
     });
 
     this.projectRepository.save(project);
@@ -74,6 +76,7 @@ export class ProjectsService {
       id: +id,
       ...updateProjectDto,
       labels,
+      categories: [],
     });
 
     if (!project) {

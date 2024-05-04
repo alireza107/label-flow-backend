@@ -1,4 +1,5 @@
 import { IsBoolean, IsString } from 'class-validator';
+import { Project } from 'src/project/entities/project.entity';
 
 export class CreateCategoryDto {
   @IsString()
@@ -9,4 +10,7 @@ export class CreateCategoryDto {
 
   @IsBoolean()
   readonly isActive: boolean;
+
+  @IsString({ each: true })
+  readonly projects: Project[];
 }

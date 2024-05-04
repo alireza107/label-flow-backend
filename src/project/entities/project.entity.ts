@@ -9,6 +9,7 @@ import {
 } from 'typeorm';
 import { Label } from './label.entity';
 import { User } from 'src/user/entities/user.entity';
+import { Category } from 'src/category/entities/category.entity';
 
 @Entity()
 export class Project {
@@ -24,8 +25,9 @@ export class Project {
   @OneToMany(() => Label, (label) => label.project, { cascade: true })
   labels: Label[];
 
-  @Column('json', { nullable: true })
-  categories: string[];
+  @ManyToMany(() => Category, (category) => category.projects)
+  @JoinTable()
+  categories: Category[];
 
   @ManyToOne(() => User, (user) => user.createdProjects)
   createdBy: User;
